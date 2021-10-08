@@ -13,6 +13,7 @@ import models.User;
  */
 public class AccountService//should be a static class?
 {
+    //no constructor provided means default no-arg constructor is implicitly provided
     public User login(String username, String password)
     {
         if((username.equals("abe") || username.equals("barb")) && password.equals("password"))

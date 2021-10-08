@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.User;
+import services.AccountService;
 
 /**
  *
@@ -29,7 +31,7 @@ public class LoginServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        
+        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
 
     /**
@@ -44,7 +46,27 @@ public class LoginServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        //activates when the user clicks the log in button on the login form
+        AccountService bouncer = new AccountService();
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         
+        User theUser = bouncer.login(username, password);
+        
+        //check if either box is empty or if username or password is wrong
+        if(username == null || username.equals("") || password == null || password.equals("") || theUser == null)
+        {
+            //create an attribute that is a boolean to flag if the validation was tripped
+            request.setAttribute("invalidInput", true);
+            //display form again
+            request.setAttribute("uname", username);
+            request.setAttribute("psswd", password);
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            return;
+        } else 
+        {
+            
+        }
     }
 
 

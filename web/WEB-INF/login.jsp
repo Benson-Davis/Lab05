@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,10 +16,14 @@
         <h1>Login</h1>
         <div>
             <form method="post" action="login">
-                Username: <input type="text" name="username" value=""><br>
-                Password: <input type="text" name="password" value=""><br>
+                Username: <input type="text" name="username" value="${uname}" required><br>
+                Password: <input type="password" name="password" value="${psswd}" required><br>
                 <input type="submit" value="Log in">
             </form>
+            <%--Everything within the c: tag is part of JSTL--%>
+            <c:if test="${invalidInput}">
+                <p>"Invalid login"</p>
+            </c:if>
         </div>
     </body>
 </html>
