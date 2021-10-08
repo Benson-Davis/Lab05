@@ -32,11 +32,13 @@ public class LoginServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        //get session and attempt to create a User based on session's stored User
         HttpSession session = request.getSession();  
         User checkUser = (User)session.getAttribute("user");
         if(checkUser == null)//no user exists, this is a new session. Load login page as normal
         {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            return;
         } else if(request.getParameter("logout") != null)//check if user got here by clicking logout on home page
         {
             //invalidate the session, expunging login credentials
@@ -71,7 +73,7 @@ public class LoginServlet extends HttpServlet
         String password = request.getParameter("password");
         
         HttpSession session = request.getSession();
-        User theUser = bouncer.login(username, password);
+        User theUser = bouncer.login(username, password);//will return null of login fails
         session.setAttribute("user", theUser);
         
         //check if either box is empty or if username or password is wrong

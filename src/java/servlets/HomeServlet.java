@@ -29,7 +29,7 @@ public class HomeServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        //handle login validation funcionality here
+        //get session and attempt to generate User based on session's stored User
         HttpSession session = request.getSession();
         User theUser = (User)session.getAttribute("user");
         if(theUser == null)//theUser only exists if a valid login has been made
@@ -37,7 +37,7 @@ public class HomeServlet extends HttpServlet
             response.sendRedirect("login");//redirect user to loginservlet, which will see the null user object and load the login page
         } else
         {
-            getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);//load home page as normal
         }
     }
 

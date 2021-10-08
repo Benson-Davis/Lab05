@@ -20,11 +20,8 @@
                 Password: <input type="password" name="password" value="${psswd}" required><br>
                 <input type="submit" value="Log in">
             </form>
-            <%--Everything within the c: tag is part of JSTL
-            <c:if test="${invalidInput}">
-                <p>"Invalid login"</p>
-            </c:if>--%>
-            <c:choose>
+            <%--Everything within the c: tag is part of JSTL--%>
+            <c:choose><%--This is the closest option to an if-else statement--%>
                 <c:when test="${invalidInput}">
                     <p>"Invalid login"</p>
                 </c:when>
