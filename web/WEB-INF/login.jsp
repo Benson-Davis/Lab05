@@ -20,10 +20,18 @@
                 Password: <input type="password" name="password" value="${psswd}" required><br>
                 <input type="submit" value="Log in">
             </form>
-            <%--Everything within the c: tag is part of JSTL--%>
+            <%--Everything within the c: tag is part of JSTL
             <c:if test="${invalidInput}">
                 <p>"Invalid login"</p>
-            </c:if>
+            </c:if>--%>
+            <c:choose>
+                <c:when test="${invalidInput}">
+                    <p>"Invalid login"</p>
+                </c:when>
+                <c:when test="${loggedOut}">
+                    <p>"You have successfully logged out"</p>
+                </c:when>
+            </c:choose>
         </div>
     </body>
 </html>

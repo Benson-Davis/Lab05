@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import models.User;
 import services.AccountService;
 
@@ -31,7 +32,25 @@ public class LoginServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        HttpSession session = request.getSession();  
+        User checkUser = (User)session.getAttribute("user");
+        if(checkUser == null)//no user exists, this is a new session. Load login page as normal
+        {
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        } else if(request.getParameter("logout") != null)//check if user got here by clicking logout on home page
+        {
+            //invalidate the session, expunging login credentials
+            session.invalidate();
+            //set attribute so proper message is displayed
+            request.setAttribute("loggedOut", true);
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            return;
+        } else //user is logged in and trying to reach login screen
+        {
+            response.sendRedirect("home");
+        }
+        
+        
     }
 
     /**
@@ -51,7 +70,9 @@ public class LoginServlet extends HttpServlet
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
+        HttpSession session = request.getSession();
         User theUser = bouncer.login(username, password);
+        session.setAttribute("user", theUser);
         
         //check if either box is empty or if username or password is wrong
         if(username == null || username.equals("") || password == null || password.equals("") || theUser == null)
@@ -59,13 +80,15 @@ public class LoginServlet extends HttpServlet
             //create an attribute that is a boolean to flag if the validation was tripped
             request.setAttribute("invalidInput", true);
             //display form again
-            request.setAttribute("uname", username);
-            request.setAttribute("psswd", password);
+            session.setAttribute("uname", username);
+            session.setAttribute("psswd", password);
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         } else 
         {
-            
+            //store username in session variable and then redirect user to HomeServlet
+            session.setAttribute("uname", username);
+            response.sendRedirect("home");
         }
     }
 

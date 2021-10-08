@@ -15,6 +15,6 @@
     <body>
         <h1>Home Page</h1>
         <h3>Hello ${uname}</h3>
-        <a href="">Log out</a>
+        <a href="login?logout">Log out</a><%-- create a parameter called logout, and if it has been clicked(isn't null) then load login--%>
     </body>
 </html>
